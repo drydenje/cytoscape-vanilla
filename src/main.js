@@ -1,49 +1,62 @@
-const cy = cytoscape({
+var cy = (window.cy = cytoscape({
   container: document.getElementById("cy"),
-  elements: [
-    // list of graph elements to start with
-    {
-      // node a
-      data: { id: "a" },
-    },
-    {
-      // node b
-      data: { id: "b" },
-    },
-    {
-      // edge ab
-      data: { id: "ab", source: "a", target: "b" },
-    },
-  ],
+
+  boxSelectionEnabled: false,
 
   style: [
-    // the stylesheet for the graph
     {
       selector: "node",
-      style: {
-        "background-color": "#666",
-        label: "data(id)",
+      css: {
+        content: "data(id)",
+        "text-valign": "center",
+        "text-halign": "center",
       },
     },
-
+    {
+      selector: ":parent",
+      css: {
+        "text-valign": "top",
+        "text-halign": "center",
+      },
+    },
     {
       selector: "edge",
-      style: {
-        width: 3,
-        "line-color": "#ccc",
-        "target-arrow-color": "#ccc",
-        "target-arrow-shape": "triangle",
+      css: {
         "curve-style": "bezier",
+        "target-arrow-shape": "triangle",
       },
     },
   ],
 
-  layout: {
-    name: "grid",
-    rows: 1,
+  elements: {
+    nodes: [
+      { data: { id: "a", parent: "b" }, position: { x: 215, y: 85 } },
+      { data: { id: "b" } },
+      { data: { id: "c", parent: "b" }, position: { x: 300, y: 85 } },
+      { data: { id: "d" }, position: { x: 215, y: 175 } },
+      { data: { id: "e" } },
+      { data: { id: "f", parent: "e" }, position: { x: 300, y: 175 } },
+    ],
+    edges: [
+      { data: { id: "ad", source: "a", target: "d" } },
+      { data: { id: "eb", source: "e", target: "b" } },
+    ],
   },
-});
 
-const a = cy.$("#a");
-// cy.center(a);
-cy.center();
+  layout: {
+    name: "preset",
+    padding: 5,
+  },
+}));
+
+var j = cy.$("#e");
+var tempScratch = (j.scratch()._foo = {
+  playerName: "Mats",
+});
+console.log(tempScratch);
+console.log(j);
+
+// cy.scratch()
+
+// cy.center();
+// cy.fit(document.getElementById("#e"));
